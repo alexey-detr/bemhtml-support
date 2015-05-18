@@ -1,0 +1,55 @@
+<idea-plugin version="2">
+  <id>BEMHTML Support</id>
+  <name>BEMHTML Support Plugin</name>
+  <version>1.0.1</version>
+  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+  <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+  </change-notes>
+
+  <depends>com.intellij.modules.lang</depends>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="139"/>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <lang.parserDefinition language="BEMHTML" implementationClass="bem.idea.bemhtml.lang.parser.BemHtmlParserDefinition"/>
+    <lang.braceMatcher language="BEMHTML" implementationClass="bem.idea.bemhtml.file.BemHtmlBraceMatcher"/>
+    <lang.fileViewProviderFactory language="BEMHTML" implementationClass="bem.idea.bemhtml.file.BemHtmlFileViewProviderFactory"/>
+    <lang.psiStructureViewFactory language="BEMHTML" implementationClass="bem.idea.bemhtml.structure.BemHtmlStructureViewBuilderFactory"/>
+    <colorSettingsPage implementation="bem.idea.bemhtml.highlighter.BemHtmlColorSettingsPage"/>
+    <fileTypeFactory implementation="bem.idea.bemhtml.file.BemHtmlFileTypeFactory"/>
+    <languageInjector implementation="bem.idea.bemhtml.lang.injection.BemHtmlJavaScriptInjector"/>
+    <annotator language="BEMHTML" implementationClass="bem.idea.bemhtml.validation.BemHtmlAnnotator"/>
+  </extensions>
+
+  <application-components>
+    <component>
+      <implementation-class>bem.idea.bemhtml.BemHtmlLoader</implementation-class>
+    </component>
+  </application-components>
+
+  <project-components>
+    <component>
+      <implementation-class>bem.idea.bemhtml.BemHtmlProjectComponent</implementation-class>
+    </component>
+  </project-components>
+
+  <actions>
+  </actions>
+
+</idea-plugin>
