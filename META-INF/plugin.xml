@@ -1,21 +1,27 @@
 <idea-plugin version="2">
   <id>BEMHTML Support</id>
   <name>BEMHTML Support Plugin</name>
-  <version>1.0.1</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <version>1.0.0-beta.2</version>
+  <vendor email="xlz@ya.ru" url="https://github.com/alexey-detr/bemhtml-support">Alexey</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      The plugin adds support of BEMHTML markup language to IDEA.<br>
+      It is a restored version of previously existing
+      <a href="https://github.com/afelix/bemidea-bemhtml">BEM Support</a> plugin.
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      <b>1.0.0-beta.2</b><br>
+      - Fixed error with JavaScript language registration.<br>
+      - More canonical file type icon.<br>
+      <br>
+      <b>1.0.0-beta.1</b><br>
+      - First beta version. Fully rebuilt with IDEA plugin platform.
     ]]>
   </change-notes>
 
   <depends>com.intellij.modules.lang</depends>
+  <depends>JavaScript</depends>
 
   <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
   <idea-version since-build="139"/>
