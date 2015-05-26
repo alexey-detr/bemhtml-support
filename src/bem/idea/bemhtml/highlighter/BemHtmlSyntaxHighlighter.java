@@ -4,6 +4,7 @@ import bem.idea.bemhtml.lang.lexer.BemHtmlTokenTypes;
 import bem.idea.bemhtml.lang.lexer.custom.BemHtmlTokenizer;
 import bem.idea.bemhtml.lang.lexer.custom.CustomLexer;
 import com.intellij.lexer.Lexer;
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.EffectType;
@@ -18,17 +19,7 @@ import java.util.Map;
 
 public class BemHtmlSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    private static final TextAttributes taBemEntityKeyword = new TextAttributes(new Color(0, 0, 139), null, null, null, Font.BOLD);
-    private static final TextAttributes taBemModKeyword = new TextAttributes(new Color(0, 0, 139), null, null, null, Font.BOLD);
-    private static final TextAttributes taBemValue = new TextAttributes(new Color(69, 139, 0), null, null, null, Font.BOLD);
-    private static final TextAttributes taJSONProperty = new TextAttributes(new Color(128, 128, 0), null, null, null, Font.BOLD);
-    private static final TextAttributes taJSBraces = new TextAttributes(new Color(0, 0, 0), null, null, null, Font.PLAIN);
-    private static final TextAttributes taBemKeywordsDelim = new TextAttributes(new Color(0, 0, 0), null, null, null, Font.PLAIN);
-    private static final TextAttributes taBemKeywordsColon = new TextAttributes(new Color(0, 0, 0), null, null, null, Font.PLAIN);
-    private static final TextAttributes taBemError = new TextAttributes(new Color(0, 0, 0), null, new Color(255, 0, 0), EffectType.WAVE_UNDERSCORE, Font.PLAIN);
-    private static final TextAttributes taBemComment = new TextAttributes(new Color(128, 128, 128), null, null, null, Font.ITALIC);
-
-    private static final Map<IElementType, TextAttributesKey> TOKENS_TO_STYLES;
+    private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
     @NotNull
     public Lexer getHighlightingLexer() {
@@ -36,81 +27,79 @@ public class BemHtmlSyntaxHighlighter extends SyntaxHighlighterBase {
     }
 
     static final TextAttributesKey BAD_CHARACTER = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.bem.error", taBemError);
+            "bemhtml.bem.error", HighlighterColors.BAD_CHARACTER);
 
     static final TextAttributesKey KEYWORDS_DELIM = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.keywords.delim", taBemKeywordsDelim);
+            "bemhtml.keywords.delim", HighlighterColors.TEXT);
 
     static final TextAttributesKey KEYWORDS_COLON = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.keywords.colon", taBemKeywordsColon);
+            "bemhtml.keywords.colon", HighlighterColors.TEXT);
 
     static final TextAttributesKey BEM_VALUE = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.bem.value", taBemValue);
+            "bemhtml.bem.value", HighlighterColors.TEXT);
 
     static final TextAttributesKey BEM_SL_COMMENT = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.bem.slcomment", taBemComment);
+            "bemhtml.bem.slcomment", DefaultLanguageHighlighterColors.LINE_COMMENT);
 
     static final TextAttributesKey BEM_ML_COMMENT = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.bem.mlcomment", taBemComment);
+            "bemhtml.bem.mlcomment", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
 
     static final TextAttributesKey JSON_PROPERTY = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.json.property", taJSONProperty);
+            "bemhtml.json.property", DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey KEYWORD_ENTITY = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.keyword.entity", taBemEntityKeyword);
+            "bemhtml.keyword.entity", DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey KEYWORD_MOD = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.keyword.mod", taBemModKeyword);
+            "bemhtml.keyword.mod", DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey(
-            "bemhtml.braces", taJSBraces);
+            "bemhtml.braces", DefaultLanguageHighlighterColors.BRACES);
 
     static {
-        TOKENS_TO_STYLES = new HashMap<IElementType, TextAttributesKey>();
+        fillMap(ATTRIBUTES, BAD_CHARACTER,
+                BemHtmlTokenTypes.BAD_CHARACTER,
+                BemHtmlTokenTypes.ERROR_ONE_BEM_VALUE_EXPECTED,
+                BemHtmlTokenTypes.ERROR_TWO_BEM_VALUES_EXPECTED,
+                BemHtmlTokenTypes.ERROR_UNEXPECTED_CHARACTER,
+                BemHtmlTokenTypes.ERROR_WHITESPACE_EXPECTED,
+                BemHtmlTokenTypes.ERROR_TOO_MANY_VALUES,
+                BemHtmlTokenTypes.ERROR_UNFINISHED_ML_COMMENT,
+                BemHtmlTokenTypes.ERROR_PUNCTUATION_EXPECTED,
+                BemHtmlTokenTypes.ERROR_INVALID_JSON_VALUE,
+                BemHtmlTokenTypes.ERROR_BEM_OR_JS_EXPECTED
+        );
 
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.WHITE_SPACE, HighlighterColors.TEXT);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORDS_DELIM, KEYWORDS_DELIM);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORDS_COLON, KEYWORDS_COLON);
+        ATTRIBUTES.put(BemHtmlTokenTypes.BEM_VALUE, BEM_VALUE);
+        ATTRIBUTES.put(BemHtmlTokenTypes.JSON_PROPERTY, JSON_PROPERTY);
 
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.BAD_CHARACTER, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_ONE_BEM_VALUE_EXPECTED, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_TWO_BEM_VALUES_EXPECTED, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_UNEXPECTED_CHARACTER, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_WHITESPACE_EXPECTED, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_TOO_MANY_VALUES, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_UNFINISHED_ML_COMMENT, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_PUNCTUATION_EXPECTED, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_INVALID_JSON_VALUE, BAD_CHARACTER);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ERROR_BEM_OR_JS_EXPECTED, BAD_CHARACTER);
+        ATTRIBUTES.put(BemHtmlTokenTypes.SL_COMMENT, BEM_SL_COMMENT);
+        ATTRIBUTES.put(BemHtmlTokenTypes.ML_COMMENT, BEM_ML_COMMENT);
 
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORDS_DELIM, KEYWORDS_DELIM);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORDS_COLON, KEYWORDS_COLON);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.BEM_VALUE, BEM_VALUE);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.JSON_PROPERTY, JSON_PROPERTY);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_BLOCK, KEYWORD_ENTITY);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_ELEM, KEYWORD_ENTITY);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_MOD, KEYWORD_ENTITY);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_ELEMMOD, KEYWORD_ENTITY);
 
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.SL_COMMENT, BEM_SL_COMMENT);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.ML_COMMENT, BEM_ML_COMMENT);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_DEFAULT, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_TAG, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_ATTRS, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_CLS, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_BEM, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_JS, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_JSATTR, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_MIX, KEYWORD_MOD);
+        ATTRIBUTES.put(BemHtmlTokenTypes.KEYWORD_CONTENT, KEYWORD_MOD);
 
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_BLOCK, KEYWORD_ENTITY);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_ELEM, KEYWORD_ENTITY);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_MOD, KEYWORD_ENTITY);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_ELEMMOD, KEYWORD_ENTITY);
-
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_DEFAULT, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_TAG, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_ATTRS, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_CLS, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_BEM, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_JS, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_JSATTR, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_MIX, KEYWORD_MOD);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.KEYWORD_CONTENT, KEYWORD_MOD);
-
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.LEFT_BRACE, BRACES);
-        TOKENS_TO_STYLES.put(BemHtmlTokenTypes.RIGHT_BRACE, BRACES);
+        ATTRIBUTES.put(BemHtmlTokenTypes.LEFT_BRACE, BRACES);
+        ATTRIBUTES.put(BemHtmlTokenTypes.RIGHT_BRACE, BRACES);
     }
 
     @NotNull
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        return pack(TOKENS_TO_STYLES.get(tokenType));
+        return pack(ATTRIBUTES.get(tokenType));
     }
 
 }
