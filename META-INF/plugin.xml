@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>BEMHTML Support</id>
   <name>BEMHTML Support Plugin</name>
-  <version>1.0.0-beta.2</version>
+  <version>1.0.0-beta.3</version>
   <vendor email="xlz@ya.ru" url="https://github.com/alexey-detr/bemhtml-support">Alexey</vendor>
 
   <description><![CDATA[
@@ -11,6 +11,9 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <b>1.0.0-beta.3</b><br>
+      - Added Darcula theme support.<br>
+      <br>
       <b>1.0.0-beta.2</b><br>
       - Fixed error with JavaScript language registration.<br>
       - More canonical file type icon.<br>
